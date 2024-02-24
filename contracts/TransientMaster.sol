@@ -7,7 +7,11 @@ pragma solidity ^0.8.24;
 library TransientMaster {
 
     struct Variable {
-        uint256 value;
+        uint256 dummy;
+    }
+
+    struct Array {
+        uint256 dummy;
     }
 
     function getUint256(Variable storage self) internal view returns (uint256 value) {
@@ -16,7 +20,7 @@ library TransientMaster {
         );
     }
 
-    function setUint256(Variable storage self, uint256 value) internal {
+    function set(Variable storage self, uint256 value) internal {
         tstore(
             getSlot(self),
             value
@@ -29,8 +33,8 @@ library TransientMaster {
         value = address(uint160(intermediate));
     }
 
-    function setAddress(Variable storage self, address value) internal {
-        setUint256(self, uint256(uint160(value)));
+    function set(Variable storage self, address value) internal {
+        set(self, uint256(uint160(value)));
     }
 
     function getBool(Variable storage self) internal view returns (bool value) {
@@ -39,8 +43,8 @@ library TransientMaster {
         value = intermediate == 1;
     }
 
-    function setBool(Variable storage self, bool value) internal {
-        setUint256(self, value ? 1 : 0);
+    function set(Variable storage self, bool value) internal {
+        set(self, value ? 1 : 0);
     }
 
     function tload(uint256 slot) private view returns (uint256 value) {

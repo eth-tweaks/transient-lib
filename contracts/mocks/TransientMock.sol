@@ -25,9 +25,9 @@ contract TransientMock {
         assert(a.getAddress() == address(0));
         assert(b.getBool() == false);
         
-        u.setUint256(5);
-        a.setAddress(address(0xFFfFfFffFFfffFFfFFfFFFFFffFFFffffFfFFFfF));
-        b.setBool(true);
+        u.set(5);
+        a.set(address(0xFFfFfFffFFfffFFfFFfFFFFFffFFFffffFfFFFfF));
+        b.set(true);
 
         assert(u.getUint256() == 5);
         assert(a.getAddress() == address(0xFFfFfFffFFfffFFfFFfFFFFFffFFFffffFfFFFfF));
@@ -43,16 +43,16 @@ contract TransientMock {
     }
 
     function setUint(uint256 value) external {
-        u.setUint256(value);
+        u.set(value);
     }
 
     function testAddressRevert(uint256 value) external returns(address) {
-        u.setUint256(value);
+        u.set(value);
         return u.getAddress();
     }
 
     function testBoolRevert(uint256 value) external returns(bool) {
-        u.setUint256(value);
+        u.set(value);
         return u.getBool();
     }
 }
