@@ -21,7 +21,7 @@ contract TransientMock {
     }
 
     function beforeCallback() external {
-        assert(u.getUint256() == 0);
+        assert(u.get() == 0);
         assert(a.getAddress() == address(0));
         assert(b.getBool() == false);
         
@@ -29,7 +29,7 @@ contract TransientMock {
         a.set(address(0xFFfFfFffFFfffFFfFFfFFFFFffFFFffffFfFFFfF));
         b.set(true);
 
-        assert(u.getUint256() == 5);
+        assert(u.get() == 5);
         assert(a.getAddress() == address(0xFFfFfFffFFfffFFfFFfFFFFFffFFFffffFfFFFfF));
         assert(b.getBool() == true);
 
@@ -37,7 +37,7 @@ contract TransientMock {
     }
 
     function afterCallback() external view {
-        assert(u.getUint256() == 5);
+        assert(u.get() == 5);
         assert(a.getAddress() == address(0xFFfFfFffFFfffFFfFFfFFFFFffFFFffffFfFFFfF));
         assert(b.getBool() == true);
     }
