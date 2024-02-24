@@ -3,9 +3,19 @@ require('dotenv').config();
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
-  solidity: "0.8.24",
+  solidity: {
+    version: "0.8.24",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 1000,
+      },
+      evmVersion: "cancun",
+    },
+  },
   networks: {
     hardhat: {
+      hardfork: "cancun"
     },
     chapel: {
       url: process.env.BSC_TESTNET_URL,
