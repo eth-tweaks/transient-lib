@@ -5,38 +5,42 @@ pragma solidity ^0.8.24;
 // import "hardhat/console.sol";
 
 library TransientMaster {
-    
-    struct Uint256 {
-        uint256 value;
-    }
 
     struct Variable {
         uint256 value;
     }
 
     function getUint256(Variable storage self) internal view returns (uint256 value) {
-        assembly {
-            value := sload(self.slot)
-        }
+        value = tload(
+            getSlot(self)
+        );
     }
 
-    function setUint256(Uint256 storage self, uint256 value) internal {
-        assembly {
-            sstore(self.slot, value)
-        }
+    function setUint256(Variable storage self, uint256 value) internal {
+        tstore(
+            getSlot(self),
+            value
+        );
     }
 
-
-    function get(Uint256 storage self) internal view returns (uint256 value) {
-        assembly {
-            value := tload(self.slot)
-        }
+    function getAddress(Variable storage self) internal view returns (address value) {
+        uint256 intermediate = getUint256(self);
+        require(intermediate < (1 << 160), "TM: casting error");
+        value = address(uint160(intermediate));
     }
 
-    function set(Uint256 storage self, uint256 value) internal {
-        assembly {
-            tstore(self.slot, value)
-        }
+    function setAddress(Variable storage self, address value) internal {
+        setUint256(self, uint256(uint160(value)));
+    }
+
+    function getBool(Variable storage self) internal view returns (bool value) {
+        uint256 intermediate = getUint256(self);
+        require(intermediate < 2, "TM: casting error");
+        value = intermediate == 1;
+    }
+
+    function setBool(Variable storage self, bool value) internal {
+        setUint256(self, value ? 1 : 0);
     }
 
     function tload(uint256 slot) private view returns (uint256 value) {

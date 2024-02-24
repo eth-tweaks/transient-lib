@@ -14,8 +14,33 @@ describe("Transient Master", function () {
       mock = await TransientMock.deploy();
     });
   
-    it("uint256", async () => {
-      await mock.setUint256();
+    it("base type variables", async () => {
+      await mock.beforeCallback();
     });
+
+    it("cast address", async () => {
+      const correctAddress = "0xffffffffffffffffffffffffffffffffffffffff";
+      const incorrectAddress = "0x10000000000000000000000000000000000000000";
+      
+      expect(
+        (await mock.callStatic.testAddressRevert(correctAddress)).toLowerCase()
+      ).to.equal(correctAddress);
+
+      await expect(mock.testAddressRevert(incorrectAddress))
+        .to.be.revertedWith("TM: casting error");
+    });
+
+    it("cast bool", async () => {
+      const correctBool = 1;
+      const incorrectBool = 2;
+      
+      expect(
+        await mock.callStatic.testBoolRevert(correctBool)
+      ).to.equal(true);
+
+      await expect(mock.testBoolRevert(incorrectBool))
+        .to.be.revertedWith("TM: casting error");
+    });
+
   });
 });

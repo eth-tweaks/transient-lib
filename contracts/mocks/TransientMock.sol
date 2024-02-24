@@ -10,22 +10,49 @@ import "../TransientMaster.sol";
 contract TransientMock {
     using TransientMaster for *;
 
+    TransientMaster.Variable u;
+    TransientMaster.Variable a;
+    TransientMaster.Variable b;
+
     IntermediateMock callee;
-    TransientMaster.Uint256 uint256Value;
 
     constructor() {
         callee = new IntermediateMock();
     }
 
-    function setUint256() external {
-        assert(uint256Value.get() == 0);
-        uint256Value.set(5);
-        assert(uint256Value.get() == 5);
+    function beforeCallback() external {
+        assert(u.getUint256() == 0);
+        assert(a.getAddress() == address(0));
+        assert(b.getBool() == false);
+        
+        u.setUint256(5);
+        a.setAddress(address(0xFFfFfFffFFfffFFfFFfFFFFFffFFFffffFfFFFfF));
+        b.setBool(true);
 
-        callee.callbackUint256();
+        assert(u.getUint256() == 5);
+        assert(a.getAddress() == address(0xFFfFfFffFFfffFFfFFfFFFFFffFFFffffFfFFFfF));
+        assert(b.getBool() == true);
+
+        callee.callback();
     }
 
-    function getUint256() external view {
-        assert(uint256Value.get() == 5);
+    function afterCallback() external view {
+        assert(u.getUint256() == 5);
+        assert(a.getAddress() == address(0xFFfFfFffFFfffFFfFFfFFFFFffFFFffffFfFFFfF));
+        assert(b.getBool() == true);
+    }
+
+    function setUint(uint256 value) external {
+        u.setUint256(value);
+    }
+
+    function testAddressRevert(uint256 value) external returns(address) {
+        u.setUint256(value);
+        return u.getAddress();
+    }
+
+    function testBoolRevert(uint256 value) external returns(bool) {
+        u.setUint256(value);
+        return u.getBool();
     }
 }

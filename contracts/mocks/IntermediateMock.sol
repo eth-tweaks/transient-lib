@@ -8,7 +8,7 @@ import "./TransientMock.sol";
 
 contract IntermediateMock {
     
-    function callbackUint256() external view {
-        TransientMock(msg.sender).getUint256();
+    function callback() external view {
+        TransientMock(msg.sender).afterCallback();
     }
 }
