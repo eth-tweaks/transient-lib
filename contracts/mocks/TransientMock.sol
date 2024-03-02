@@ -2,7 +2,7 @@
 pragma solidity ^0.8.24;
 
 import "./IntermediateMock.sol";
-import "../TransientMaster.sol";
+import "../libs/TransientMaster.sol";
 
 // Uncomment this line to use console.log
 // import "hardhat/console.sol";
@@ -25,9 +25,9 @@ contract TransientMock {
         assert(a.getAddress() == address(0));
         assert(b.getBool() == false);
         
-        u.set(5);
-        a.set(address(0xFFfFfFffFFfffFFfFFfFFFFFffFFFffffFfFFFfF));
-        b.set(true);
+        u.setUint256(5);
+        a.setAddress(address(0xFFfFfFffFFfffFFfFFfFFFFFffFFFffffFfFFFfF));
+        b.setBool(true);
 
         assert(u.getUint256() == 5);
         assert(a.getAddress() == address(0xFFfFfFffFFfffFFfFFfFFFFFffFFFffffFfFFFfF));
@@ -43,16 +43,16 @@ contract TransientMock {
     }
 
     function setUint(uint256 value) external {
-        u.set(value);
+        u.setUint256(value);
     }
 
     function testAddressRevert(uint256 value) external returns(address) {
-        u.set(value);
+        u.setUint256(value);
         return u.getAddress();
     }
 
     function testBoolRevert(uint256 value) external returns(bool) {
-        u.set(value);
+        u.setUint256(value);
         return u.getBool();
     }
 }

@@ -8,6 +8,21 @@ describe("Transient Master", function () {
     TransientMock = await ethers.getContractFactory("TransientMock");
   });
 
+  describe("Slots allocation", function () {
+    beforeEach(async () => {
+      const TestStorageSlots = await ethers.getContractFactory("TestStorageSlots");
+      testSlots = await TestStorageSlots.deploy();
+    })
+
+    it("Test array slot location", async () => {
+      await testSlots.testArray();
+    });
+
+    it("Test array slot location with overflow", async () => {
+      await testSlots.testArrayOverflow();
+    });
+  });
+
   describe("Static transient", function () {
 
     beforeEach(async () => {
