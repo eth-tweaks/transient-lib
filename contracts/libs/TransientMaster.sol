@@ -75,7 +75,7 @@ library TransientMaster {
 
     function getAddress(Variable storage self) internal view returns (address value) {
         uint256 intermediate = getUint256(self);
-        require(intermediate < (1 << 160), "TM: casting error");
+        require(intermediate < (1 << 160), "TM: address casting error");
         value = address(uint160(intermediate));
     }
 
@@ -83,9 +83,18 @@ library TransientMaster {
         setUint256(self, uint256(uint160(value)));
     }
 
+    function getBytes32(Variable storage self) internal view returns (bytes32 value) {
+        uint256 intermediate = getUint256(self);
+        value = bytes32(intermediate);
+    }
+
+    function setBytes32(Variable storage self, bytes32 value) internal {
+        setUint256(self, uint256(value));
+    }
+
     function getBool(Variable storage self) internal view returns (bool value) {
         uint256 intermediate = getUint256(self);
-        require(intermediate < 2, "TM: casting error");
+        require(intermediate < 2, "TM: bool casting error");
         value = intermediate == 1;
     }
 

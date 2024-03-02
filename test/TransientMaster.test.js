@@ -42,7 +42,7 @@ describe("Transient Master", function () {
       ).to.equal(correctAddress);
 
       await expect(mock.testAddressRevert(incorrectAddress))
-        .to.be.revertedWith("TM: casting error");
+        .to.be.revertedWith("TM: address casting error");
     });
 
     it("cast bool", async () => {
@@ -54,7 +54,7 @@ describe("Transient Master", function () {
       ).to.equal(true);
 
       await expect(mock.testBoolRevert(incorrectBool))
-        .to.be.revertedWith("TM: casting error");
+        .to.be.revertedWith("TM: bool casting error");
     });
 
   });

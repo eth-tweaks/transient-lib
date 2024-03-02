@@ -13,6 +13,7 @@ contract TransientMock {
     TransientMaster.Variable u;
     TransientMaster.Variable a;
     TransientMaster.Variable b;
+    TransientMaster.Variable bts32;
 
     IntermediateMock callee;
 
@@ -24,14 +25,17 @@ contract TransientMock {
         assert(u.getUint256() == 0);
         assert(a.getAddress() == address(0));
         assert(b.getBool() == false);
+        assert(bts32.getBytes32() == bytes32(0));
         
         u.setUint256(5);
         a.setAddress(address(0xFFfFfFffFFfffFFfFFfFFFFFffFFFffffFfFFFfF));
         b.setBool(true);
+        bts32.setBytes32(keccak256("bytes32"));
 
         assert(u.getUint256() == 5);
         assert(a.getAddress() == address(0xFFfFfFffFFfffFFfFFfFFFFFffFFFffffFfFFFfF));
         assert(b.getBool() == true);
+        assert(bts32.getBytes32() == keccak256("bytes32"));
 
         callee.callback();
     }
@@ -40,6 +44,7 @@ contract TransientMock {
         assert(u.getUint256() == 5);
         assert(a.getAddress() == address(0xFFfFfFffFFfffFFfFFfFFFFFffFFFffffFfFFFfF));
         assert(b.getBool() == true);
+        assert(bts32.getBytes32() == keccak256("bytes32"));
     }
 
     function setUint(uint256 value) external {
