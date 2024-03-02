@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.24;
 
-import "./TransientMock.sol";
+import "./TransientMasterMock.sol";
 
 // Uncomment this line to use console.log
 // import "hardhat/console.sol";
@@ -9,6 +9,6 @@ import "./TransientMock.sol";
 contract IntermediateMock {
     
     function callback() external view {
-        TransientMock(msg.sender).afterCallback();
+        TransientMasterMock(msg.sender).afterCallback();
     }
 }

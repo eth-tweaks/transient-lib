@@ -5,7 +5,7 @@ describe("Transient Master", function () {
 
   before(async () => {
     [admin, alice, bob, charlie] = await ethers.getSigners();
-    TransientMock = await ethers.getContractFactory("TransientMock");
+    TransientMasterMock = await ethers.getContractFactory("TransientMasterMock");
   });
 
   describe("Slots allocation", function () {
@@ -26,7 +26,7 @@ describe("Transient Master", function () {
   describe("Static transient", function () {
 
     beforeEach(async () => {
-      mock = await TransientMock.deploy();
+      mock = await TransientMasterMock.deploy();
     });
   
     it("base type variables", async () => {

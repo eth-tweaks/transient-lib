@@ -7,7 +7,7 @@ import "../libs/TransientMaster.sol";
 // Uncomment this line to use console.log
 // import "hardhat/console.sol";
 
-contract TransientMock {
+contract TransientMasterMock {
     using TransientMaster for *;
 
     TransientMaster.Variable u;
