@@ -27,9 +27,9 @@ library TransientArrays {
 
     function push(ArrayUint256 storage v, uint256 value) internal {
         TransientMaster.Array storage arr = ArrayUint256ToArray(v);
-        uint256 length = arr.length();
-        arr.resize(length + 1);
-        arr.getVariable(length).setUint256(value);
+        uint256 l = arr.length();
+        arr.resize(l + 1);
+        arr.getVariable(l).setUint256(value);
     }
 
     function pop(ArrayUint256 storage v) internal {
