@@ -46,6 +46,30 @@ library TransientMaster {
         }
     }
 
+    function length(Array storage self) internal view returns (uint256) {
+        return tload(getSlot(self));
+    }
+
+    function pop(Array storage self) internal {
+        uint256 l = length(self);
+        require(l > 0, "TM: trying to pop empty array");
+        l--;
+        tstore(getSlot(self), l);
+    }
+
+    function resize(Array storage self, uint256 newLength) internal {
+        tstore(getSlot(self), newLength);
+    }
+
+    function toUint256Memory(Array storage self) internal view returns(uint256[] memory result) {
+        uint256 l = length(self);
+        result = new uint256[](l);
+        for (uint i = 0; i < l; i++) {
+            TransientMaster.Variable storage v = getVariable(self, i);
+            result[i] = getUint256(v);
+        }
+    }
+
     function getMapping(
         Array storage self, 
         uint256 index
