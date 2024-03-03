@@ -3,13 +3,14 @@ pragma solidity ^0.8.24;
 
 import "./TransientMaster.sol";
 
-// Uncomment this line to use console.log
-// import "hardhat/console.sol";
-
 library TransientVariables {
     using TransientMaster for *;
 
     struct Uint256 {
+        uint256 dummy;
+    }
+
+    struct Address {
         uint256 dummy;
     }
 
@@ -29,4 +30,19 @@ library TransientVariables {
         }
     }
 
+    function set(Address storage v, address value) internal {
+        AddressToVariable(v).setAddress(value);
+    }
+
+    function get(Address storage v) internal view returns (address value) {
+        value = AddressToVariable(v).getAddress();
+    }
+
+    function AddressToVariable(
+        Address storage v
+    ) private pure returns(TransientMaster.Variable storage r) {
+        assembly {
+            r.slot := v.slot
+        }
+    }
 }

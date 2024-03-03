@@ -3,9 +3,6 @@ pragma solidity ^0.8.24;
 
 import "./TransientMaster.sol";
 
-// Uncomment this line to use console.log
-// import "hardhat/console.sol";
-
 library TransientArrays {
     using TransientMaster for *;
 

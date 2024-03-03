@@ -4,9 +4,6 @@ pragma solidity ^0.8.24;
 import "./IntermediateMock.sol";
 import "../libs/TransientMaster.sol";
 
-// Uncomment this line to use console.log
-// import "hardhat/console.sol";
-
 contract TransientMasterMock {
     using TransientMaster for *;
 
