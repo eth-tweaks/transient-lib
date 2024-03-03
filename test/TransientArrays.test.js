@@ -17,7 +17,13 @@ describe("Transient Arrays", function () {
     it("base type arrays", async () => {
       let r = await mock.callStatic.beforeCallback();
 
-      expect(r).to.deep.equal([3]);
+      expect(r).to.deep.equal(
+        [
+          [3], 
+          ["0xDDdDddDdDdddDDddDDddDDDDdDdDDdDDdDDDDDDd"]
+        ]
+      );
+
       await mock.beforeCallback();
     });
   });

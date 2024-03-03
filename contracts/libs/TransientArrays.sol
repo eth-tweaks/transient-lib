@@ -10,6 +10,10 @@ library TransientArrays {
         uint256 dummy;
     }
 
+    struct ArrayAddress {
+        uint256 dummy;
+    }
+
     function set(ArrayUint256 storage v, uint256 index, uint256 value) internal {
         TransientMaster.Array storage arr = ArrayUint256ToArray(v);
         require(index < arr.length(), "TA: out of bounds");
@@ -44,6 +48,49 @@ library TransientArrays {
 
     function ArrayUint256ToArray(
         ArrayUint256 storage v
+    ) private pure returns(TransientMaster.Array storage r) {
+        assembly {
+            r.slot := v.slot
+        }
+    }
+
+    function set(ArrayAddress storage v, uint256 index, address value) internal {
+        TransientMaster.Array storage arr = ArrayAddressToArray(v);
+        require(index < arr.length(), "TA: out of bounds");
+        arr.getVariable(index).setAddress(value);
+    }
+
+    function get(ArrayAddress storage v, uint256 index) internal view returns (address value) {
+        TransientMaster.Array storage arr = ArrayAddressToArray(v);
+        require(index < arr.length(), "TA: out of bounds");
+        value = arr.getVariable(index).getAddress();
+    }
+
+    function push(ArrayAddress storage v, address value) internal {
+        TransientMaster.Array storage arr = ArrayAddressToArray(v);
+        uint256 l = arr.length();
+        arr.resize(l + 1);
+        arr.getVariable(l).setAddress(value);
+    }
+
+    function pop(ArrayAddress storage v) internal {
+        TransientMaster.Array storage arr = ArrayAddressToArray(v);
+        arr.pop();
+    }
+
+    function length(ArrayAddress storage v) internal view returns (uint256) {
+        return ArrayAddressToArray(v).length();
+    }
+
+    function toMemory(ArrayAddress storage v) internal view returns (address[] memory r) {
+        uint256[] memory temp = ArrayAddressToArray(v).toUint256Memory();
+        assembly {
+            r := temp
+        }
+    }
+
+    function ArrayAddressToArray(
+        ArrayAddress storage v
     ) private pure returns(TransientMaster.Array storage r) {
         assembly {
             r.slot := v.slot
