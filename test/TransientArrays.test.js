@@ -20,7 +20,9 @@ describe("Transient Arrays", function () {
       expect(r).to.deep.equal(
         [
           [3], 
-          ["0xDDdDddDdDdddDDddDDddDDDDdDdDDdDDdDDDDDDd"]
+          ["0xDDdDddDdDdddDDddDDddDDDDdDdDDdDDdDDDDDDd"],
+          [false],
+          [ethers.utils.id("3")]
         ]
       );
 
