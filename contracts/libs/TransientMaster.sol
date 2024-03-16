@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
 library TransientMaster {
@@ -81,6 +81,50 @@ library TransientMaster {
         }
     }
 
+    function getVariable(
+        Mapping storage self,
+        uint256 key
+    ) internal pure returns (Variable storage result) {
+        uint256 resultSlot = calculateMappingSlot(getSlot(self), key);
+        
+        assembly {
+            result.slot := resultSlot
+        }
+    }
+
+    function getVariable(
+        Mapping storage self,
+        address key
+    ) internal pure returns (Variable storage result) {
+        uint256 resultSlot = calculateMappingSlot(getSlot(self), uint256(uint160(key)));
+        
+        assembly {
+            result.slot := resultSlot
+        }
+    }
+
+    function getVariable(
+        Mapping storage self,
+        bytes32 key
+    ) internal pure returns (Variable storage result) {
+        uint256 resultSlot = calculateMappingSlot(getSlot(self), uint256(key));
+        
+        assembly {
+            result.slot := resultSlot
+        }
+    }
+
+    function getVariable(
+        Mapping storage self,
+        bool key
+    ) internal pure returns (Variable storage result) {
+        uint256 resultSlot = calculateMappingSlot(getSlot(self), key ? 1 : 0);
+        
+        assembly {
+            result.slot := resultSlot
+        }
+    }
+
     function getUint256(Variable storage self) internal view returns (uint256 value) {
         value = tload(
             getSlot(self)
@@ -147,6 +191,12 @@ library TransientMaster {
         }
     }
 
+    function getSlot(Mapping storage self) private pure returns (uint256 slot) {
+        assembly {
+            slot := self.slot
+        }
+    }
+
     function calculateArraySlot(uint256 slot, uint256 index) private pure returns (uint256 resultSlot) {
         unchecked {
             resultSlot = uint256(
@@ -157,11 +207,11 @@ library TransientMaster {
         }
     }
 
-    // function calculateMappingSlot(uint256 slot, uint256 key) private pure returns (uint256 resultSlot) {
-    //     resultSlot = uint256(
-    //         keccak256(
-    //             abi.encode(key, slot)
-    //         )
-    //     );
-    // }
+    function calculateMappingSlot(uint256 slot, uint256 key) private pure returns (uint256 resultSlot) {
+        resultSlot = uint256(
+            keccak256(
+                abi.encode(key, slot)
+            )
+        );
+    }
 }
