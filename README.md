@@ -23,3 +23,22 @@ To test in hardhat set target to "cancun" both in compiler and evm block in `har
     },
   }
 ```
+
+Import to solidity contract and declare transient variables as storage variables. It doesnt use storage, but serves as a syntax sugar that holds a slot number
+
+```solidity
+pragma solidity ^0.8.24;
+
+import "transient-lib/contracts/libs/TransientVariables.sol";
+
+contract ReentrancyProtection {
+    using TransientVariables for *;
+
+    TransientVariables.Bool reentrancyFlag;
+
+    modifier noReentrant {
+        require (reentransyFlag.get() == false, "Reentrancy is not allowed");
+        reentransyFlag.set(true);
+    }
+}
+```
