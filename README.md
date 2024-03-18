@@ -14,10 +14,6 @@ To test in hardhat set target to "cancun" both in compiler and evm block in `har
   solidity: {
     version: "0.8.24",
     settings: {
-      optimizer: {
-        enabled: true,
-        runs: 1000,
-      },
       evmVersion: "cancun",
     },
   },
