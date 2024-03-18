@@ -1,13 +1,29 @@
-# Sample Hardhat Project
+# Library for custom transient storage types
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+# Installation
 
-Try running some of the following tasks:
+Install with:
 
 ```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.js
+npm i transient-lib
+```
+
+To test in hardhat set target to "cancun" both in compiler and evm block in `hardhat.config.js`:
+
+```js
+  solidity: {
+    version: "0.8.24",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 1000,
+      },
+      evmVersion: "cancun",
+    },
+  },
+  networks: {
+    hardhat: {
+      hardfork: "cancun"
+    },
+  }
 ```
