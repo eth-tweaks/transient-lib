@@ -84,3 +84,63 @@ arraytype[] memory arr1 = arr.toMemory(); // Writes array to memory
 ```
 
 ## TransientMappings.sol
+
+Currentrly only 3 types of mappings are implemented
+
+```
+TransientMappings.MappingAddressToUint256 for mapping(address => uint256)
+TransientMappings.MappingAddressToBytes32 for mapping(address => bytes32)
+TransientMappings.MappingBytes32ToBool for mapping(bytes32 => bool)
+```
+
+They are accessed by the following methods:
+
+```solidity
+map.set(key, value); // Sets value on key.
+value = map.get(key); // Gets value by key.
+```
+
+Since it is very lengthy to define mapping for each pair of static types, one should take them as example and implement your own mapping type.
+
+At first you need to define your custom type. It is just a syntax sugar and a placeholder for a slot:
+
+```solidity
+    struct MappingBytes32ToUint256 {
+        uint256 dummy;
+    }
+```
+
+The most tricky part is converting your custom type to abstract mapping type, since all the methods you need are incapsulated for this abstract type. You should define the function that converts it into the abstract Mapping type from TransientMaster.sol lib
+
+```solidity
+    function convertMyCustomTypeToMapping(
+        MappingBytes32ToUint256 storage v
+    ) private pure returns(TransientMaster.Mapping storage r) {
+        assembly {
+            r.slot := v.slot
+        }
+    }
+```
+
+Then just use abstract Mapping method to define setter and getter:
+
+```solidity
+    function set(
+        MappingBytes32ToUint256 storage self,
+        bytes32 key,
+        uint256 value
+    ) internal {
+        TransientMaster.Mapping storage m = convertMyCustomTypeToMapping(self);
+        TransientMaster.Variable storage v = m.getVariable(key);
+        v.setUint256(value);
+    }
+
+    function get(
+        MappingBytes32ToUint256 storage self,
+        bytes32 key
+    ) internal view returns (uint256 value) {
+        TransientMaster.Mapping storage m = convertMyCustomTypeToMapping(self);
+        TransientMaster.Variable storage v = m.getVariable(key);
+        value = v.getUint256();
+    }
+```
